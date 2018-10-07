@@ -49,17 +49,18 @@ class Emitter extends EventTarget {
 ## How to use:
 
 ```javascript
-const MyEmmiter = new Emitter()
+const MyEmitter = new Emitter()
 
 // one or more listeners for same target ...
 MyEmitter.on('xyz', data => {
     // yep, date is a `CustomEvent` object so use the "detail" property for get data
     console.log('first listener: ', data.detail)
-}
+})
+
 MyEmitter.on('xyz', data => {
     // yep, date is a `CustomEvent` object so use the "detail" property for get data
     console.log('second listener: ', data.detail)
-}
+})
 
 // fire event for this target
 MyEmitter.emit('xyz', 'zzzzzzzzzz...') // see listeners show
@@ -73,11 +74,17 @@ MyEmitter.emit('xyz', 'bu bu bu') // nothing ;)
 
 // fire a "once" ? Yes, fire
 MyEmitter.once('abc', data => {
-    console.log(data.detail)
-}
+    console.log('fired by "once": ', data.detail)
+})
 
 // run
-MyEmitter('abc', 'Hello World') // its show listener only once
+MyEmitter.emit('abc', 'Hello World') // its show listener only once
+
+// test "once" again
+MyEmitter.emit('abc', 'Hello World') // nothing
+
+// alternated "direct-once" on `.on()` ... pass third argument (Boolean: true)
+MyEmitter.on('target', function(){}, true)
 ```
 
 

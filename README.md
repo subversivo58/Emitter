@@ -20,10 +20,16 @@ class Emitter extends EventTarget {
         this.listeners = {}
     }
     on(e, cb, once = false) {
+        // check `.once()`
+        if ( once ) {
+            // callback `CustomEvent`
+            this.addEventListener(e, cb, { once: once })
+            return
+        }
         // store one-by-one registered listeners
         !this.listeners[e] ? this.listeners[e] = [cb] : this.listeners[e].push(cb)
         // callback `CustomEvent`
-        this.addEventListener(e, cb, { once: once })
+        this.addEventListener(e, cb)
     }
     off(e) {
         if ( this.listeners[e] ) {

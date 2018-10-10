@@ -18,16 +18,10 @@
      * @param {Boolean} once - indicator trigger only once
      */
     on(e, cb, once = false) {
-        // check `.once()`
-        if ( once ) {
-            // callback `CustomEvent`
-            this.addEventListener(e, cb, { once: once })
-            return
-        }
         // store one-by-one registered listeners
         !this.listeners[e] ? this.listeners[e] = [cb] : this.listeners[e].push(cb)
-        // callback `CustomEvent`
-        this.addEventListener(e, cb)
+        // check `.once()` ... callback `CustomEvent`
+        once ? this.addEventListener(e, cb, { once: once }) : this.addEventListener(e, cb)
     }
     
     /**

@@ -135,6 +135,7 @@ MyEmitter.emit('noop', 'hello World')
 ## To do:
 
 - [ ] allow multiple "callbacks" references to `.off()` method
+- [ ] add **"wildcard"** (*) to listen all events. See [#3](https://github.com/subversivo58/Emitter/issues/3)
 
 
 ## Supported Browsers:

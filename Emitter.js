@@ -13,29 +13,45 @@
     
     /**
      * Initialize listener(s)
-     * @param {String}    e  - event target name
-     * @param {Function} cb  - callback to receive `CustomEvent` object
+     * @param {String}     e - event target name
+     * @param {Function}  cb - callback to receive `CustomEvent` object
      * @param {Boolean} once - indicator trigger only once
      */
     on(e, cb, once = false) {
         // store one-by-one registered listeners
         !this.listeners[e] ? this.listeners[e] = [cb] : this.listeners[e].push(cb)
         // check `.once()` ... callback `CustomEvent`
-        once ? this.addEventListener(e, cb, { once: once }) : this.addEventListener(e, cb)
+        once ? this.addEventListener(e, cb, { once: true }) : this.addEventListener(e, cb)
     }
     
     /**
      * Disable listener(s)
-     * @param {String} e - event target name
+     * @param {String}    e - event target name
+     * @param {Function} Fn - callback function reference (default false)
      */
-    off(e) {
+    off(e, Fn = false) {
         if ( this.listeners[e] ) {
+            let reference = []
             // iterate all listeners for this target
-            this.listeners[e].forEach((target, i, arr) => {
+            this.listeners[e].forEach((target, index, array) => {
+                // check {Function} reference, is same function ... mapp reference by index
+                Fn && Fn === target ? reference.unshift(index) : null
+                // remove listener (include ".once()")
                 this.removeEventListener(e, target)
                 // on end "loop" ... remove all listeners of this target (by reference)
-                if ( i === arr.length -1 ) {
-                    delete this.listeners[e]
+                if ( index === array.length -1 ) {
+                    if ( !Fn || this.listeners[e].length === 0) {
+                        // remove all of this target
+                        delete this.listeners[e]
+                    } else {
+                        this.listeners[e].length === 0 ? delete this.listeners[e] : reference.forEach((m, i, a) => {
+                            this.listeners[e].splice(m, 1)
+                            if ( i === a.length -1 ) {
+                                // empty reference ? delete
+                                this.listeners[e].length === 0 ? delete this.listeners[e] : null
+                            }
+                        })
+                    }
                 }
             })
         }
@@ -43,7 +59,7 @@
     
     /**
      * Fire a event - dispatched from `CustomEvent`
-     * @param {String} e              - event target name
+     * @param {String}              e - event target name
      * @param {String|Object|Array} d - data
      */
     emit(e, d) {
@@ -52,7 +68,7 @@
     
     /**
      * Fire a once event - uses `.on()`
-     * @param {String} e    - event target name
+     * @param {String}    e - event target name
      * @param {Function} cb - callback to receive `CustomEvent` object
      */
     once(e, cb) {

@@ -25,16 +25,36 @@ class Emitter extends EventTarget {
         // check `.once()` ... callback `CustomEvent`
         once ? this.addEventListener(e, cb, { once: once }) : this.addEventListener(e, cb)
     }
-    off(e) {
+    off(e, Fn = false) {
         if ( this.listeners[e] ) {
-            // iterate all listeners for this target
-            this.listeners[e].forEach((target, i, arr) => {
+            // remove listener (include ".once()")
+            let removeListener = target => {
                 this.removeEventListener(e, target)
-                // on end "loop" ... remove all listeners of this target (by reference)
-                if ( i === arr.length -1 ) {
+            }
+
+            // use `.filter()` to remove expecific event(s) associated to this callback
+            const filter = () => {
+                this.listeners[e] = this.listeners[e].filter(val => {
+                    return val === Fn ? removeListener(val) : val
+                })
+                // check number of listeners for this target ... remove target if empty
+                if ( this.listeners[e].length === 0 ) {
                     delete this.listeners[e]
                 }
-            })
+            }
+
+            // use `.forEach()` to iterate all listeners for this target
+            const iterate = () => {
+                this.listeners[e].forEach((val, index, array) => {
+                    removeListener(val)
+                    // on end "loop" remove all listeners reference for this target (by target object)
+                    if ( index === array.length -1 ) {
+                        delete this.listeners[e]
+                    }
+                })
+            }
+
+            Fn && typeof Fn === 'function' ? filter() : iterate()
         }
     }
     emit(e, d) {
@@ -85,6 +105,30 @@ MyEmitter.emit('abc', 'Hello World') // nothing
 
 // alternated "direct-once" on `.on()` ... pass third argument (Boolean: true)
 MyEmitter.on('target', function(){}, true)
+
+// stop target especific listener
+function A(data) {
+    console.log('fired on "function A()": ', data.detail)
+}
+function B(data) {
+    console.log('fired on "function B()": ', data.detail)
+}
+MyEmitter.on('noop', A)
+MyEmitter.once('noop', A)
+MyEmitter.on('noop', B)
+MyEmitter.on('noop', data => {
+    console.log('fired from "anonimous function": ', data.detail)
+})
+
+// stop ...
+MyEmitter.off('noop', A)
+
+// emit ...
+MyEmitter.emit('noop', 'hello World')
+
+// expect ...
+> fired on "function B()": hello world
+> fired from "anonimous function": hello world
 ```
 
 

@@ -31,29 +31,34 @@
      */
     off(e, Fn = false) {
         if ( this.listeners[e] ) {
-            let reference = []
-            // iterate all listeners for this target
-            this.listeners[e].forEach((target, index, array) => {
-                // check {Function} reference, is same function ... mapp reference by index
-                Fn && Fn === target ? reference.unshift(index) : null
-                // remove listener (include ".once()")
+            // remove listener (include ".once()")
+            let removeListener = target => {
                 this.removeEventListener(e, target)
-                // on end "loop" ... remove all listeners of this target (by reference)
-                if ( index === array.length -1 ) {
-                    if ( !Fn || this.listeners[e].length === 0) {
-                        // remove all of this target
-                        delete this.listeners[e]
-                    } else {
-                        this.listeners[e].length === 0 ? delete this.listeners[e] : reference.forEach((m, i, a) => {
-                            this.listeners[e].splice(m, 1)
-                            if ( i === a.length -1 ) {
-                                // empty reference ? delete
-                                this.listeners[e].length === 0 ? delete this.listeners[e] : null
-                            }
-                        })
-                    }
+            }
+
+            // use `.filter()` to remove expecific event(s) associated to this callback
+            const filter = () => {
+                this.listeners[e] = this.listeners[e].filter(val => {
+                    return val === Fn ? removeListener(val) : val
+                })
+                // check number of listeners for this target ... remove target if empty
+                if ( this.listeners[e].length === 0 ) {
+                    delete this.listeners[e]
                 }
-            })
+            }
+
+            // use `.forEach()` to iterate all listeners for this target
+            const iterate = () => {
+                this.listeners[e].forEach((val, index, array) => {
+                    removeListener(val)
+                    // on end "loop" remove all listeners references for this target (by target object)
+                    if ( index === array.length -1 ) {
+                        delete this.listeners[e]
+                    }
+                })
+            }
+
+            Fn && typeof Fn === 'function' ? filter() : iterate()
         }
     }
     

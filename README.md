@@ -23,7 +23,7 @@ class Emitter extends EventTarget {
         // store one-by-one registered listeners
         !this.listeners[e] ? this.listeners[e] = [cb] : this.listeners[e].push(cb)
         // check `.once()` ... callback `CustomEvent`
-        once ? this.addEventListener(e, cb, { once: once }) : this.addEventListener(e, cb)
+        once ? this.addEventListener(e, cb, { once: true }) : this.addEventListener(e, cb)
     }
     off(e, Fn = false) {
         if ( this.listeners[e] ) {
@@ -134,7 +134,7 @@ MyEmitter.emit('noop', 'hello World')
 
 ## To do:
 
-A listing will be created later
+- [ ] allow multiple "callbacks" references to `.off()` method
 
 
 ## Supported Browsers:

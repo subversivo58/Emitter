@@ -18,6 +18,14 @@ When I "stumbled" on this issue in [StackOverflow](https://stackoverflow.com/que
 // import module ... yep, ES6 module sintax
 import Emitter from './your-path-to/Emitter.mjs'
 
+/**
+ * or global for non-module support ... property of `window`
+ * <script src="./your-path-to/Emitter.js"></script>
+ * <script>
+ *     const CustomEmitter = new Emitter() // const CustomEmitter = new window.Emitter()
+ * </script>
+ */
+
 const CustomEmitter = new Emitter()
 ```
 --------------

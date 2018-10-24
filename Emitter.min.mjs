@@ -1,0 +1,6 @@
+
+/**
+ * @license The MIT License (MIT)             - [https://github.com/subversivo58/Emitter/blob/master/LICENSE]
+ * @copyright Copyright (c) 2018 Lauro Moraes - [https://github.com/subversivo58]
+ * @version 0.1.0 [development stage]         - [https://github.com/subversivo58/Emitter/blob/master/VERSIONING.md]
+ */export class Emitter extends EventTarget{constructor(){super(),this.listeners={'*':[]}}on(a,b,c=!1){this.listeners[a]?this.listeners[a].push(b):this.listeners[a]=[b],c?this.addEventListener(a,b,{once:!0}):this.addEventListener(a,b)}off(a,b=!1){if(this.listeners[a]){let c=h=>{this.removeEventListener(a,h)};b&&'function'==typeof b?(()=>{this.listeners[a]=this.listeners[a].filter(h=>{return h===b?c(h):h}),0===this.listeners[a].length&&('*'===a?null:delete this.listeners[a])})():(()=>{for(let h=this.listeners[a].length;h--;)c(this.listeners[a][h]);'*'===a?this.listeners[a]=[]:delete this.listeners[a]})()}}emit(a,b){0<this.listeners['*'].length&&this.dispatchEvent(new CustomEvent('*',{detail:b})),this.dispatchEvent(new CustomEvent(a,{detail:b}))}once(a,b){this.on(a,b,!0)}}

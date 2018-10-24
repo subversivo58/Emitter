@@ -4,7 +4,7 @@
  * @version 0.1.0 [development stage]         - [https://github.com/subversivo58/Emitter/blob/master/VERSIONING.md]
  */
 
-export class Emitter extends EventTarget {
+class Emitter extends EventTarget {
     constructor() {
         super()
         // store listeners (by callback)
@@ -56,3 +56,6 @@ export class Emitter extends EventTarget {
         this.on(e, cb, true)
     }
 }
+
+// add to global scope
+window.Emitter = Emitter

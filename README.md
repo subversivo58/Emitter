@@ -10,132 +10,105 @@ When I "stumbled" on this issue in [StackOverflow](https://stackoverflow.com/que
 
 
 
-## The code:
+## API:
+
+**Instance**:
 
 ```javascript
-class Emitter extends EventTarget {
-    constructor() {
-        super()
-        // store listeners
-        this.listeners = {}
-    }
-    on(e, cb, once = false) {
-        // store one-by-one registered listeners
-        !this.listeners[e] ? this.listeners[e] = [cb] : this.listeners[e].push(cb)
-        // check `.once()` ... callback `CustomEvent`
-        once ? this.addEventListener(e, cb, { once: true }) : this.addEventListener(e, cb)
-    }
-    off(e, Fn = false) {
-        if ( this.listeners[e] ) {
-            // remove listener (include ".once()")
-            let removeListener = target => {
-                this.removeEventListener(e, target)
-            }
+// import module ... yep, ES6 module sintax
+import Emitter from './your-path-to/Emitter.mjs'
 
-            // use `.filter()` to remove expecific event(s) associated to this callback
-            const filter = () => {
-                this.listeners[e] = this.listeners[e].filter(val => {
-                    return val === Fn ? removeListener(val) : val
-                })
-                // check number of listeners for this target ... remove target if empty
-                if ( this.listeners[e].length === 0 ) {
-                    delete this.listeners[e]
-                }
-            }
-
-            // use `.forEach()` to iterate all listeners for this target
-            const iterate = () => {
-                this.listeners[e].forEach((val, index, array) => {
-                    removeListener(val)
-                    // on end "loop" remove all listeners reference for this target (by target object)
-                    if ( index === array.length -1 ) {
-                        delete this.listeners[e]
-                    }
-                })
-            }
-
-            Fn && typeof Fn === 'function' ? filter() : iterate()
-        }
-    }
-    emit(e, d) {
-        this.dispatchEvent(new CustomEvent(e, {detail: d}))
-    }
-    once(e, cb) {
-        this.on(e, cb, true)
-    }
-}
+const CustomEmitter = new Emitter()
 ```
+--------------
 
-## How to use:
+**Listener**:
+
+**.on(event, Fn [,once])**
 
 ```javascript
-const MyEmitter = new Emitter()
-
-// one or more listeners for same target ...
-MyEmitter.on('xyz', data => {
-    // yep, date is a `CustomEvent` object so use the "detail" property for get data
-    console.log('first listener: ', data.detail)
+CustomEmitter.on('xyz', data => {
+    // yep, data is a `CustomEvent` object, so use the "detail" property for get data
+    console.log(data.detail)
 })
-
-MyEmitter.on('xyz', data => {
-    // yep, date is a `CustomEvent` object so use the "detail" property for get data
-    console.log('second listener: ', data.detail)
-})
-
-// fire event for this target
-MyEmitter.emit('xyz', 'zzzzzzzzzz...') // see listeners show
-
-// stop all listeners for this target
-MyEmitter.off('xyz')
-
-// try new "emit" listener event ?
-MyEmitter.emit('xyz', 'bu bu bu') // nothing ;)
-
-
-// fire a "once" ? Yes, fire
-MyEmitter.once('abc', data => {
-    console.log('fired by "once": ', data.detail)
-})
-
-// run
-MyEmitter.emit('abc', 'Hello World') // its show listener only once
-
-// test "once" again
-MyEmitter.emit('abc', 'Hello World') // nothing
-
-// alternated "direct-once" on `.on()` ... pass third argument (Boolean: true)
-MyEmitter.on('target', function(){}, true)
-
-// stop target especific listener
-function A(data) {
-    console.log('fired on "function A()": ', data.detail)
-}
-function B(data) {
-    console.log('fired on "function B()": ', data.detail)
-}
-MyEmitter.on('noop', A)
-MyEmitter.once('noop', A)
-MyEmitter.on('noop', B)
-MyEmitter.on('noop', data => {
-    console.log('fired from "anonimous function": ', data.detail)
-})
-
-// stop ...
-MyEmitter.off('noop', A)
-
-// emit ...
-MyEmitter.emit('noop', 'hello World')
-
-// expect ...
-> fired on "function B()": hello world
-> fired from "anonimous function": hello world
 ```
 
+Listener to an or more event(s) ... properties of `.on()`:
+
+* **event**: `String` event target name
+* **Fn**: `Function` callback for get data
+* **once**: `Boolean` optional alias to `.once()` method ... default: **false**
+
+
+**.once(event, Fn)**
+
+```javascript
+CustomEmitter.once('abc', data => {
+    // yep, data is a `CustomEvent` object, so use the "detail" property for get data
+    console.log(data.detail)
+})
+```
+
+Watch an event only once  ... properties of `.once()`:
+
+* **event**: `String` event target name
+* **Fn**: `Function` callback for get data
+
+--------------
+
+**Fire**:
+
+**.emit(event, data)**
+
+```javascript
+CustomEmitter.emit('abc', 'hello world')
+```
+
+* **event**: `String` event target name
+* **data**: `Object|Array|String` arbitrary data to pass an event
+
+--------------
+
+**Stop**:
+
+**.off(event [,Fn])**
+
+```javascript
+CustomEmitter.off('xyz')
+```
+
+* **event**: `String` event target name
+* **Fn**: `Function` optional ... reference to remove especific callback 
+
+--------------
+
+**Wildcard**:
+
+**.on('*', Fn)**
+
+```javascript
+CustomEmitter.on('*', data => {
+    // yep, data is a `CustomEvent` object, so use the "detail" property for get data
+    console.log(data.detail)
+})
+```
+
+Propeties of `.on('*')`:
+
+* **'*'**: `String` wildacard for all events
+* **Fn**: `Function` callback for get data
+
+Use **'*'** for listener all events ... see [#3](https://github.com/subversivo58/Emitter/issues/3) for more details
+
+
+## Examples:
+
+See [exemple](exemple/) directory
 
 ## To do:
 
 - [ ] allow multiple "callbacks" references to `.off()` method
-- [ ] add **"wildcard"** (*) to listen all events. See [#3](https://github.com/subversivo58/Emitter/issues/3)
+- [x] add **"wildcard"** (*) to listen all events. See [#3](https://github.com/subversivo58/Emitter/issues/3)
 
 
 ## Supported Browsers:

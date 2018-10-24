@@ -1,3 +1,10 @@
+
+/**
+ * @license The MIT License (MIT)             - [https://github.com/subversivo58/Emitter/blob/master/LICENSE]
+ * @copyright Copyright (c) 2018 Lauro Moraes - [https://github.com/subversivo58]
+ * @version 0.1.0 [development stage]         - [https://github.com/subversivo58/Emitter/blob/master/VERSIONING.md]
+ */
+
 import Emitter from '../Emitter.mjs'
 
 const CustomEmitter = new Emitter()

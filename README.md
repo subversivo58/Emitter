@@ -86,7 +86,7 @@ CustomEmitter.off('xyz')
 ```
 
 * **event**: `String` event target name
-* **Fn**: `Function` optional ... reference to remove especific callback 
+* **Fn**: `Function` optional ... reference to remove especific callback
 
 --------------
 
@@ -116,6 +116,7 @@ See [exemple](exemple/) directory
 ## To do:
 
 - [ ] allow multiple "callbacks" references to `.off()` method
+- [ ] return the content without having to go through the `CustomEvent.detail` property
 - [x] add **"wildcard"** (*) to listen all events. See [#3](https://github.com/subversivo58/Emitter/issues/3)
 
 
@@ -123,16 +124,16 @@ See [exemple](exemple/) directory
 
 In this date (October 7, 2018) Chrome, Firefox, Opera and WebView (Android) according to the documentation in [Mozilla](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget)
 
-* **desktop**: 
+* **desktop**:
   * Chrome 64
   * Firefox 59
   * Opera 51
-* **mobile**: 
+* **mobile**:
   * WebView 64
   * Chrome Android 64
   * Firefox Android 59
   * Opera Android 51
-  
+
 
 ## License
 

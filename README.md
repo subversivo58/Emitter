@@ -139,7 +139,7 @@ In this date (October 7, 2018) Chrome, Firefox, Opera and WebView (Android) acco
 
 MIT License
 
-Copyright (c) 2018 Lauro Moraes [[AKA Subversivo58]](https://github.com/subversivo58)
+Copyright (c) 2018 - 2020 Lauro Moraes [[AKA Subversivo58]](https://github.com/subversivo58)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -116,7 +116,7 @@ See [exemple](exemple/) directory
 ## To do:
 
 - [ ] allow multiple "callbacks" references to `.off()` method
-- [ ] return the content without having to go through the `CustomEvent.detail` property
+- [ ] return the content without having to go through the `CustomEvent.detail` property. See [#3](https://github.com/subversivo58/Emitter/issues/6)
 - [x] add **"wildcard"** (*) to listen all events. See [#3](https://github.com/subversivo58/Emitter/issues/3)
 
 

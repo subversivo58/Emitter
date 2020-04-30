@@ -1,7 +1,7 @@
 
 /**
  * @license The MIT License (MIT)             - [https://github.com/subversivo58/Emitter/blob/master/LICENSE]
- * @copyright Copyright (c) 2018 Lauro Moraes - [https://github.com/subversivo58]
+ * @copyright Copyright (c) 2020 Lauro Moraes - [https://github.com/subversivo58]
  * @version 0.1.0 [development stage]         - [https://github.com/subversivo58/Emitter/blob/master/VERSIONING.md]
  */
 
@@ -10,17 +10,17 @@ import Emitter from '../Emitter.mjs'
 const CustomEmitter = new Emitter()
 
 function A(data) {
-    console.log('Fired for "function A(){}" :', data.detail)
+    console.log('Fired for "function A(){}" :', data)
 }
 function B(data) {
-    console.log('Fired for "function B(){}" :', data.detail)
+    console.log('Fired for "function B(){}" :', data)
 }
 
 // multiple targets
 CustomEmitter.on('abc', A)
 CustomEmitter.on('abc', B)
 CustomEmitter.on('abc', data => {
-    console.log('Fired for "anonimous function" :', data.detail)
+    console.log('Fired for "anonimous function" :', data)
 })
 
 // fire
@@ -67,7 +67,7 @@ CustomEmitter.on('test2', B)
 
 // all
 CustomEmitter.on('*', data => {
-    console.log('Fired for "widcard" listener', data.detail)
+    console.log('Fired for "widcard" listener', data)
 })
 
 CustomEmitter.emit('test1', 'walking')  // ?

@@ -28,7 +28,7 @@ import Emitter from './your-path-to/Emitter.mjs'
 
 const CustomEmitter = new Emitter()
 ```
---------------
+---------
 
 **Listener**:
 
@@ -36,8 +36,7 @@ const CustomEmitter = new Emitter()
 
 ```javascript
 CustomEmitter.on('xyz', data => {
-    // yep, data is a `CustomEvent` object, so use the "detail" property for get data
-    console.log(data.detail)
+    console.log(data)
 })
 ```
 
@@ -52,8 +51,7 @@ Listener to an or more event(s) ... properties of `.on()`:
 
 ```javascript
 CustomEmitter.once('abc', data => {
-    // yep, data is a `CustomEvent` object, so use the "detail" property for get data
-    console.log(data.detail)
+    console.log(data)
 })
 ```
 
@@ -92,12 +90,11 @@ CustomEmitter.off('xyz')
 
 **Wildcard**:
 
-**.on('*', Fn)**
+**`.on('*', Fn)`**
 
 ```javascript
 CustomEmitter.on('*', data => {
-    // yep, data is a `CustomEvent` object, so use the "detail" property for get data
-    console.log(data.detail)
+    console.log(data)
 })
 ```
 
@@ -116,7 +113,7 @@ See [exemple](exemple/) directory
 ## To do:
 
 - [ ] allow multiple "callbacks" references to `.off()` method
-- [ ] return the content without having to go through the `CustomEvent.detail` property. See [#6](https://github.com/subversivo58/Emitter/issues/6)
+- [x] return the content without having to go through the `CustomEvent.detail` property. See [#6](https://github.com/subversivo58/Emitter/issues/6)
 - [x] add **"wildcard"** (*) to listen all events. See [#3](https://github.com/subversivo58/Emitter/issues/3)
 
 
